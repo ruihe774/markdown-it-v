@@ -1,0 +1,12 @@
+{
+  "name": "markdown-it-v",
+  "version": "0.1.0",
+  "description": "A custom markdown-it renderer that outputs virtual DOM",
+  "main": "dist/index.js",
+  "repository": "https://github.com/TitanSnow/markdown-it-v",
+  "author": "TitanSnow",
+  "license": "MIT",
+  "dependencies": {
+    "markdown-it": "^8.4.2"
+  }
+}

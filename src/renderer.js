@@ -120,7 +120,7 @@ export default class Renderer extends OriginalRenderer {
                 needLf = true
                 if (nesting === 1) {
                     if (idx + 1 < tokens.length) {
-                        nextToken = tokens[idx + 1];
+                        const nextToken = tokens[idx + 1];
                         if (nextToken.type === 'inline' || nextToken.hidden) {
                             needLf = false;
                         } else if (nextToken.nesting === -1 && nextToken.tag === token.tag) {

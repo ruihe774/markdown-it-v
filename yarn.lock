@@ -380,7 +380,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.54"
 
-"@babel/plugin-transform-dotall-regex@7.0.0-beta.54", "@babel/plugin-transform-dotall-regex@^7.0.0-beta.54":
+"@babel/plugin-transform-dotall-regex@7.0.0-beta.54":
   version "7.0.0-beta.54"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-dotall-regex/-/plugin-transform-dotall-regex-7.0.0-beta.54.tgz#2835b7f4141b19fa0648eb96ffe3c4fccd1eca20"
   dependencies:

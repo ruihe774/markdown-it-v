@@ -74,19 +74,20 @@ export class Node {
     return result
   }
   renderInnerVDOM(h) {
-    return this.children
-        .map(
-          child =>
-            typeof child === 'string'
-              ? child
-              : child.renderToVDOM(h),
-        )
+    return this.children.map(
+      child => (typeof child === 'string' ? child : child.renderToVDOM(h)),
+    )
   }
   renderToVDOM(h) {
     if (this.tagName === voidTag) {
       return this.renderInnerVDOM(h)
     } else {
-      return h(this.tagName, this.attrs, this.innerHTML, this.renderInnerVDOM(h))
+      return h(
+        this.tagName,
+        this.attrs,
+        this.innerHTML,
+        this.renderInnerVDOM(h),
+      )
     }
   }
 }
@@ -109,6 +110,8 @@ export default class StreamDom {
     return this.currentNode.renderToHTML(xhtmlOut)
   }
   toVue(createElement) {
-    return this.currentNode.renderToVDOM(crossCreateElement.createElementVueFactory(createElement))
+    return this.currentNode.renderToVDOM(
+      crossCreateElement.createElementVueFactory(createElement),
+    )
   }
 }

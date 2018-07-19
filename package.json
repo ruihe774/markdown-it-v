@@ -15,13 +15,19 @@
     "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.54",
     "@babel/plugin-transform-dotall-regex": "^7.0.0-beta.54",
     "@babel/preset-env": "^7.0.0-beta.54",
+    "babel-eslint": "^9.0.0-beta.3",
+    "eslint": "^5.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.2",
     "markdown-it-testgen": "^0.1.4",
     "mocha": "^5.2.0",
+    "prettier": "^1.13.7",
     "rollup": "^0.63.2",
     "rollup-plugin-babel": "^4.0.0-beta.7"
   },
   "scripts": {
     "build": "rollup -c",
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint src/**/*.js"
   }
 }

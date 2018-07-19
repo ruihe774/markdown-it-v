@@ -22,8 +22,7 @@ export default [
                 plugins: [
                     '@babel/plugin-proposal-class-properties',
                     '@babel/plugin-proposal-optional-chaining',
-                    '@babel/plugin-transform-dotall-regex',
-                    '@babel/plugin-proposal-function-bind'
+                    '@babel/plugin-transform-dotall-regex'
                 ]
             })
         ],

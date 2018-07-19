@@ -47,7 +47,7 @@ const default_rules = {
         slf.sDom.closeTag()
         slf.sDom.closeTag()
         slf.sDom.appendText('\n')
-        return self.sDom
+        return slf.sDom
     },
     hardbreak (tokens, idx, options, env, slf) {
         slf.openTag('br')

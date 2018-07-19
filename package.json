@@ -16,6 +16,8 @@
     "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.54",
     "@babel/plugin-transform-dotall-regex": "^7.0.0-beta.54",
     "@babel/preset-env": "^7.0.0-beta.54",
+    "markdown-it-testgen": "^0.1.4",
+    "mocha": "^5.2.0",
     "rollup": "^0.63.2",
     "rollup-plugin-babel": "^4.0.0-beta.7"
   },

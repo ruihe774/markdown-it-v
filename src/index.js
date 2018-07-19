@@ -6,12 +6,18 @@ export default md => {
     const renderInline = md.renderInline
     md.render = function (...args) {
         const result = render.apply(this, args)
-        this.renderer.clear?.()
+        if (this.renderer instanceof Renderer) {
+            this.renderer.clear()
+            result.xhtmlOut = md.options.xhtmlOut
+        }
         return result
     }
     md.renderInline = function (...args) {
         const result = renderInline.apply(this, args)
-        this.renderer.clear?.()
+        if (this.renderer instanceof Renderer) {
+            this.renderer.clear()
+            result.xhtmlOut = md.options.xhtmlOut
+        }
         return result
     }
 }

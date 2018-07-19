@@ -12,17 +12,21 @@ export class Node {
     renderAttrsToHTML () {
         return Object.entries(this.attrs).map(([key, value]) => `${escapeHtml(key)}="${escapeHtml(value)}"`).join(' ')
     }
-    renderToHTML () {
+    renderToHTML (xhtmlOut = false) {
         const attrsString = this.renderAttrsToHTML()
         let result = '<' + this.tagName
         if (attrsString) {
             result += ' ' + attrsString
         }
         if (voidElements.has(this.tagName)) {
-            result += '/>'
+            if (xhtmlOut) {
+                result += ' />'
+            } else {
+                result += '>'
+            }
         } else {
             result += '>'
-            result += this.children.map(child => typeof child === 'string' ? escapeHtml(child) : child.renderToHTML()).join('')
+            result += this.children.map(child => typeof child === 'string' ? escapeHtml(child) : child.renderToHTML(xhtmlOut)).join('')
             result += `</${this.tagName}>`
         }
         return result
@@ -31,6 +35,7 @@ export class Node {
 
 export default class StreamDom {
     currentNode = new Node('root')
+    xhtmlOut = false
     openTag (tagName, attrs) {
         const newNode = new Node(tagName, attrs, this.currentNode)
         this.currentNode.children.push(newNode)
@@ -42,8 +47,8 @@ export default class StreamDom {
     appendText (text) {
         this.currentNode.children.push(text)
     }
-    toHTML (root) {
-        let result = this.currentNode.renderToHTML()
+    toHTML (root, xhtmlOut = this.xhtmlOut) {
+        let result = this.currentNode.renderToHTML(xhtmlOut)
         result = /^<root>(.*)<\/root>$/s.exec(result)[1]
         if (root != null) {
             result = `<${root}>${result}</${root}>`

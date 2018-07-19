@@ -18,10 +18,8 @@ export class Node {
         if (attrsString) {
             result += ' ' + attrsString
         }
-        if (voidElements.has(this.tagName)) {
-            result += '/>'
-        } else {
-            result += '>'
+        result += '>'
+        if (!voidElements.has(this.tagName)) {
             result += this.children.map(child => typeof child === 'string' ? escapeHtml(child) : child.renderToHTML()).join('')
             result += `</${this.tagName}>`
         }

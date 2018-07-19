@@ -1,4 +1,4 @@
-import StreamDom from './stream-dom'
+import { default as StreamDom, voidTag } from './stream-dom'
 import OriginalRenderer from 'markdown-it/lib/renderer'
 import { unescapeAll } from 'markdown-it/lib/common/utils'
 
@@ -41,7 +41,14 @@ const default_rules = {
         }
         slf.sDom.openTag('pre')
         slf.sDom.openTag('code', attrs)
-        if (options.highlight?.(token.content, langName, slf) !== slf.sDom) {
+        const highlighted = options.highlight?.(token.content, langName, slf)
+        if (highlighted === slf.sDom) {
+            // Processed
+        } else if (typeof highlighted === 'string') {
+            slf.sDom.closeTag()
+            slf.sDom.currentNode.children.pop()
+            slf.sDom.openTag('code', { ...attrs, __html: highlighted })
+        } else {
             slf.sDom.appendText(token.content)
         }
         slf.sDom.closeTag()
@@ -50,9 +57,9 @@ const default_rules = {
         return slf.sDom
     },
     hardbreak (tokens, idx, options, env, slf) {
-        slf.openTag('br')
-        slf.closeTag()
-        slf.appendText('\n')
+        slf.sDom.openTag('br')
+        slf.sDom.closeTag()
+        slf.sDom.appendText('\n')
     },
     softbreak (tokens, idx, options, env, slf) {
         if (options.breaks) {
@@ -60,6 +67,14 @@ const default_rules = {
         } else {
             slf.sDom.appendText('\n')
         }
+    },
+    html_block (tokens, idx, options, env, slf) {
+        slf.sDom.openTag(voidTag, { __html: tokens[idx].content })
+        slf.sDom.closeTag()
+    },
+    html_inline (tokens, idx, options, env, slf) {
+        slf.sDom.openTag(voidTag, { __html: tokens[idx].content })
+        slf.sDom.closeTag()
     }
 }
 

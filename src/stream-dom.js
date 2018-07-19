@@ -1,4 +1,5 @@
 import { escapeHtml } from 'markdown-it/lib/common/utils'
+import * as crossCreateElement from './cross-create-element'
 
 const voidElements = new Set([
   'base',
@@ -52,7 +53,7 @@ export class Node {
   }
   renderToHTML(xhtmlOut = false) {
     if (this.tagName === voidTag) {
-      return this.renderInnerHTML()
+      return this.renderInnerHTML(xhtmlOut)
     }
     const attrsString = this.renderAttrsToHTML()
     let result = '<' + this.tagName
@@ -72,10 +73,26 @@ export class Node {
     }
     return result
   }
+  renderInnerVDOM(h) {
+    return this.children
+        .map(
+          child =>
+            typeof child === 'string'
+              ? child
+              : child.renderToVDOM(h),
+        )
+  }
+  renderToVDOM(h) {
+    if (this.tagName === voidTag) {
+      return this.renderInnerVDOM(h)
+    } else {
+      return h(this.tagName, this.attrs, this.innerHTML, this.renderInnerVDOM(h))
+    }
+  }
 }
 
 export default class StreamDom {
-  currentNode = new Node('root')
+  currentNode = new Node(voidTag)
   xhtmlOut = false
   openTag(tagName, attrs) {
     const newNode = new Node(tagName, attrs, this.currentNode)
@@ -88,12 +105,10 @@ export default class StreamDom {
   appendText(text) {
     this.currentNode.children.push(text)
   }
-  toHTML(root, xhtmlOut = this.xhtmlOut) {
-    let result = this.currentNode.renderToHTML(xhtmlOut)
-    result = /^<root>(.*)<\/root>$/s.exec(result)[1]
-    if (root != null) {
-      result = `<${root}>${result}</${root}>`
-    }
-    return result
+  toHTML(xhtmlOut = this.xhtmlOut) {
+    return this.currentNode.renderToHTML(xhtmlOut)
+  }
+  toVue(createElement) {
+    return this.currentNode.renderToVDOM(crossCreateElement.createElementVueFactory(createElement))
   }
 }

@@ -2,7 +2,7 @@
   "name": "markdown-it-v",
   "version": "0.1.0",
   "description": "A custom markdown-it renderer that outputs virtual DOM",
-  "main": "dist/renderer.common.js",
+  "main": "dist/index.common.js",
   "repository": "https://github.com/TitanSnow/markdown-it-v",
   "author": "TitanSnow",
   "license": "MIT",

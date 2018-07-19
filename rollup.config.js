@@ -2,9 +2,9 @@ import babel from 'rollup-plugin-babel'
 
 export default [
     {
-        input: 'src/renderer.js',
+        input: 'src/index.js',
         output: {
-            file: 'dist/renderer.common.js',
+            file: 'dist/index.common.js',
             format: 'cjs',
             exports: 'default'
         },
@@ -15,7 +15,7 @@ export default [
                     ['@babel/preset-env', {
                         modules: false,
                         targets: {
-                            node: 'current'
+                            node: '8.11.3'
                         }
                     }]
                 ],
@@ -26,8 +26,7 @@ export default [
             })
         ],
         external: [
-            'markdown-it/lib/renderer',
-            'markdown-it/lib/common/utils'
+            'markdown-it/lib/renderer'
         ],
         watch: [
             'src/**'

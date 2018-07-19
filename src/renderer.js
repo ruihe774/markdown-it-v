@@ -1,10 +1,9 @@
 import StreamDom from './stream-dom'
 import OriginalRenderer from 'markdown-it/lib/renderer'
-import { escapeHtml } from 'markdown-it/lib/common/utils'
 
 const default_rules = {
     text (tokens, idx, options, env, slf) {
-        slf.sDom.appendText(escapeHtml(tokens[idx].content))
+        slf.sDom.appendText(tokens[idx].content)
         return slf.sDom
     }
 }
@@ -13,6 +12,9 @@ export default class Renderer extends OriginalRenderer {
     constructor () {
         super()
         this.rules = { ...default_rules }
+        this.clear()
+    }
+    clear () {
         this.sDom = new StreamDom
     }
     renderAttrs ({ attrs }) {

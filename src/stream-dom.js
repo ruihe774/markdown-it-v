@@ -114,4 +114,9 @@ export default class StreamDom {
       crossCreateElement.createElementVueFactory(createElement),
     )
   }
+  toReact(createElement) {
+    return this.currentNode.renderToVDOM(
+      crossCreateElement.createElementReactFactory(createElement),
+    )
+  }
 }

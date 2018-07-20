@@ -8,4 +8,5 @@ before_install:
 before_script:
   - yarn build
 after_success:
+  - yarn run nyc report --reporter=text-lcov > coverage.lcov
   - codecov

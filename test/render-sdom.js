@@ -21,10 +21,9 @@ class SDomRenderer {
   async close() {
     await this.browser.close()
   }
-  async render(text) {
-    return await this.page.evaluate(text => {
-      const md = Test.MarkdownIt()
-      md.use(Test.MarkdownItV)
+  async render(option, text) {
+    return await this.page.evaluate((option, text) => {
+      const md = Test.MarkdownIt(option).use(Test.MarkdownItV)
       const sdom = md.render(text)
       function genNative() {
         const root = document.createElement('div')
@@ -50,7 +49,14 @@ class SDomRenderer {
         vue: genVue(),
         react: genReact()
       }
-    }, text)
+    }, option, text)
+  }
+  async renderHTML(html) {
+    return await this.page.evaluate(html => {
+      const root = document.createElement('div')
+      root.innerHTML = html
+      return root.innerHTML
+    }, html)
   }
 }
 

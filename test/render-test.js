@@ -28,6 +28,12 @@ describe('test rendering in browser', function() {
                                 vue: excepted,
                                 react: excepted
                             })
+                        }).catch(err => {
+                            if (err.message.split('\n')[0] !== 'Evaluation failed: Error: `void` tag cannot contain innerHTML') {
+                                throw err
+                            } else {
+                                console.debug('`void` tag contains innerHTML. Skipped.')
+                            }
                         })
                     })
                 })

@@ -81,6 +81,9 @@ export class Node {
   }
   renderToVDOM(h) {
     if (this.tagName === voidTag) {
+      if (this.innerHTML != null) {
+        throw new Error("`void` tag cannot contain innerHTML")
+      }
       return this.renderInnerVDOM(h)
     } else {
       return h(

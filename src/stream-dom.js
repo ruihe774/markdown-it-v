@@ -75,14 +75,16 @@ export class Node {
     return result
   }
   renderInnerVDOM(h) {
-    return this.children.map(
-      child => (typeof child === 'string' ? child : child.renderToVDOM(h)),
-    ) |> _.flatten
+    return (
+      this.children.map(
+        child => (typeof child === 'string' ? child : child.renderToVDOM(h)),
+      ) |> _.flatten
+    )
   }
   renderToVDOM(h) {
     if (this.tagName === voidTag) {
       if (this.innerHTML != null) {
-        throw new Error("`void` tag cannot contain innerHTML")
+        throw new Error('`void` tag cannot contain innerHTML')
       }
       return this.renderInnerVDOM(h)
     } else {
@@ -99,7 +101,9 @@ export class Node {
   }
   dropParents() {
     this.dropParent()
-    this.children.filter(el => typeof el !== 'string').forEach(el => el.dropParents())
+    this.children
+      .filter(el => typeof el !== 'string')
+      .forEach(el => el.dropParents())
   }
 }
 
@@ -131,8 +135,8 @@ export default class StreamDom {
     )
   }
   toNative(document) {
-    return this.currentNode.renderToVDOM(
-      crossCreateElement.createElementNativeFactory(document),
-    ).map(el => typeof el === 'string' ? document.createTextNode(el) : el)
+    return this.currentNode
+      .renderToVDOM(crossCreateElement.createElementNativeFactory(document))
+      .map(el => (typeof el === 'string' ? document.createTextNode(el) : el))
   }
 }

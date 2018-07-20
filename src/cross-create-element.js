@@ -19,11 +19,17 @@ export function createElementReactFactory(h) {
     if (typeof arg2.style === 'string') {
       const styleString = arg2.style
       arg2.style = {}
-      csstree.walk(csstree.parse(styleString, { context: 'declarationList', parseValue: false }), ({ type, property, value }) => {
-        if (type === 'Declaration') {
-          arg2.style[property] = value.value
-        }
-      })
+      csstree.walk(
+        csstree.parse(styleString, {
+          context: 'declarationList',
+          parseValue: false,
+        }),
+        ({ type, property, value }) => {
+          if (type === 'Declaration') {
+            arg2.style[property] = value.value
+          }
+        },
+      )
     }
     return h(tagName, arg2, ...children)
   }
@@ -39,7 +45,9 @@ export function createElementNativeFactory(document) {
       el.innerHTML = innerHTML
     }
     for (const child of children) {
-      el.appendChild(typeof child === 'string' ? document.createTextNode(child) : child)
+      el.appendChild(
+        typeof child === 'string' ? document.createTextNode(child) : child,
+      )
     }
     return el
   }

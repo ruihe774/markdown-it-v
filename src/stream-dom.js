@@ -23,10 +23,9 @@ export const voidTag = Symbol('void')
 export class Node {
   constructor(tagName, attrs = {}, parent = null, ...children) {
     this.tagName = tagName
-    this.attrs = {}
-    Object.entries(attrs)
-      .filter(([key, value]) => key !== '__html')
-      .forEach(([key, value]) => void (this.attrs[key] = value))
+    this.attrs =
+      Object.entries(attrs).filter(([key, value]) => key !== '__html')
+      |> _.fromPairs
     this.innerHTML = attrs.__html
     this.parent = parent
     this.children = children

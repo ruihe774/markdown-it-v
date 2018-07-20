@@ -1,6 +1,7 @@
 import { default as StreamDom, voidTag } from './stream-dom'
 import OriginalRenderer from 'markdown-it/lib/renderer'
 import { unescapeAll } from 'markdown-it/lib/common/utils'
+import _ from 'lodash'
 
 const default_rules = {
   text(tokens, idx, options, env, slf) {
@@ -88,9 +89,7 @@ export default class Renderer extends OriginalRenderer {
     this.sDom = new StreamDom()
   }
   renderAttrs({ attrs }) {
-    const result = {}
-    attrs?.forEach(([key, value]) => void (result[key] = value))
-    return result
+    return attrs |> _.fromPairs
   }
   render(tokens, options, env) {
     tokens.forEach(({ type, children }, i) => {

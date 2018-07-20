@@ -19,6 +19,7 @@ export default [
             'markdown-it/lib/renderer',
             'markdown-it/lib/common/utils',
             'lodash/flatten',
+            'lodash/fromPairs',
             'css-tree'
         ],
         watch: [

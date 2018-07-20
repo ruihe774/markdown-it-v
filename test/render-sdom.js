@@ -2,7 +2,9 @@ const puppeteer = require('puppeteer')
 
 class SDomRenderer {
   async open() {
-    this.browser = await puppeteer.launch()
+    this.browser = await puppeteer.launch({
+      args: ['--no-sandbox']
+    })
     this.page = await this.browser.newPage()
     await this.page.goto('about:blank')
     await this.page.addScriptTag({

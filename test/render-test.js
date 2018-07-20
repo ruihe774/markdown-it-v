@@ -5,6 +5,7 @@ const chai = require("chai")
 chai.should()
 
 describe('test rendering in browser', function() {
+    this.timeout(30000)
     const sdr = new SDomRenderer
     before(function() {
         return sdr.open()

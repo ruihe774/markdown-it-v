@@ -1,7 +1,8 @@
 import { escapeHtml } from 'markdown-it/lib/common/utils'
 import * as crossCreateElement from './cross-create-element'
+import _ from 'lodash'
 
-const voidElements = new Set([
+const voidElements = [
   'base',
   'link',
   'meta',
@@ -15,7 +16,7 @@ const voidElements = new Set([
   'col',
   'input',
   'command',
-])
+]
 
 export const voidTag = Symbol('void')
 
@@ -36,7 +37,7 @@ export class Node {
       .join(' ')
   }
   renderInnerHTML(xhtmlOut = false) {
-    if (voidElements.has(this.tagName)) {
+    if (voidElements.includes(this.tagName)) {
       return ''
     } else if (this.innerHTML == null) {
       return this.children
@@ -60,7 +61,7 @@ export class Node {
     if (attrsString) {
       result += ' ' + attrsString
     }
-    if (voidElements.has(this.tagName)) {
+    if (voidElements.includes(this.tagName)) {
       if (xhtmlOut) {
         result += ' />'
       } else {
@@ -76,7 +77,7 @@ export class Node {
   renderInnerVDOM(h) {
     return this.children.map(
       child => (typeof child === 'string' ? child : child.renderToVDOM(h)),
-    )
+    ) |> _.flatten
   }
   renderToVDOM(h) {
     if (this.tagName === voidTag) {
@@ -89,6 +90,13 @@ export class Node {
         this.renderInnerVDOM(h),
       )
     }
+  }
+  dropParent() {
+    this.parent = null
+  }
+  dropParents() {
+    this.dropParent()
+    this.children.filter(el => typeof el !== 'string').forEach(el => el.dropParents())
   }
 }
 
@@ -118,5 +126,10 @@ export default class StreamDom {
     return this.currentNode.renderToVDOM(
       crossCreateElement.createElementReactFactory(createElement),
     )
+  }
+  toNative(document) {
+    return this.currentNode.renderToVDOM(
+      crossCreateElement.createElementNativeFactory(document),
+    ).map(el => typeof el === 'string' ? document.createTextNode(el) : el)
   }
 }

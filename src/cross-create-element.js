@@ -17,3 +17,19 @@ export function createElementReactFactory(h) {
     return h(tagName, arg2, ...children)
   }
 }
+
+export function createElementNativeFactory(document) {
+  return function createElementNative(tagName, attrs, innerHTML, children) {
+    const el = document.createElement(tagName)
+    for (const [key, value] of Object.entries(attrs)) {
+      el.setAttribute(key, value)
+    }
+    if (innerHTML != null) {
+      el.innerHTML = innerHTML
+    }
+    for (const child of children) {
+      el.appendChild(typeof child === 'string' ? document.createTextNode(child) : child)
+    }
+    return el
+  }
+}

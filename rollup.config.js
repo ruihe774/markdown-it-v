@@ -1,4 +1,7 @@
 import babel from 'rollup-plugin-babel'
+import resolve from 'rollup-plugin-node-resolve'
+import cjs from 'rollup-plugin-commonjs'
+import json from 'rollup-plugin-json'
 
 export default [
     {
@@ -13,7 +16,30 @@ export default [
         ],
         external: [
             'markdown-it/lib/renderer',
-            'markdown-it/lib/common/utils'
+            'markdown-it/lib/common/utils',
+            'lodash/flatten'
+        ],
+        watch: [
+            'src/**'
+        ]
+    },
+    {
+        input: 'src/testIndex.js',
+        output: {
+            file: 'dist/testIndex.iife.js',
+            format: 'iife',
+            exports: 'named',
+            name: 'Test'
+        },
+        plugins: [
+            babel({
+                exclude: 'node_modules/**'
+            }),
+            resolve({
+                preferBuiltins: false
+            }),
+            cjs(),
+            json()
         ],
         watch: [
             'src/**'

@@ -9,7 +9,8 @@ export default [
         output: {
             file: 'dist/index.common.js',
             format: 'cjs',
-            exports: 'default'
+            exports: 'default',
+            sourcemap: true
         },
         plugins: [
             babel()
@@ -30,7 +31,8 @@ export default [
             file: 'dist/testIndex.iife.js',
             format: 'iife',
             exports: 'named',
-            name: 'Test'
+            name: 'Test',
+            sourcemap: true
         },
         plugins: [
             babel({

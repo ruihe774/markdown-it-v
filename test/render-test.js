@@ -23,6 +23,7 @@ describe('test rendering in browser', function() {
                         const p1 = sdr.render(mditOption, fixture.first.text)
                         const p2 = sdr.renderHTML(excepted)
                         return Promise.all([p1, p2]).then(function([actual, excepted]) {
+                            actual.react = actual.react.replace(/text-align: (\w+);/g, 'text-align:$1')
                             actual.should.deep.equal({
                                 native: excepted,
                                 vue: excepted,

@@ -17,7 +17,8 @@ export default [
         external: [
             'markdown-it/lib/renderer',
             'markdown-it/lib/common/utils',
-            'lodash/flatten'
+            'lodash/flatten',
+            'css-tree'
         ],
         watch: [
             'src/**'

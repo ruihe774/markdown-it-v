@@ -41,5 +41,15 @@
     "build": "rollup -c",
     "test": "nyc mocha",
     "lint": "eslint src/**/*.js"
-  }
+  },
+  "keywords": [
+    "markdown",
+    "parser",
+    "commonmark",
+    "markdown-it",
+    "markdown-it-plugin",
+    "virtual dom",
+    "vdom",
+    "dom"
+  ]
 }

@@ -78,3 +78,11 @@ class Markdown extends React.Component {
     }
 }
 ```
+
+## Changelog
+
+- 1.0.0-alpha.2
+  - Use `_.fromPairs` in lodash
+
+- 1.0.0-alpha.1
+  - Initial release

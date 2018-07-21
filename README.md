@@ -1,6 +1,11 @@
 # markdown⁠-⁠it⁠-⁠v
 A custom markdown⁠-⁠it renderer that outputs virtual DOM.
 
+![build](https://img.shields.io/travis/TitanSnow/markdown-it-v.svg?style=for-the-badge)
+![coverage](https://img.shields.io/codecov/c/github/TitanSnow/markdown-it-v.svg?style=for-the-badge)
+![version](https://img.shields.io/npm/v/markdown-it-v.svg?style=for-the-badge)
+![license](https://img.shields.io/npm/l/markdown-it-v.svg?style=for-the-badge)
+
 ## Motivation
 
 ### Why prefer virtual DOM to `innerHTML`?

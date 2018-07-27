@@ -1,3 +1,5 @@
+import csstree from 'css-tree'
+
 export function createElementVueFactory(h) {
   return function createElementVue(tagName, attrs, innerHTML, children) {
     const arg2 = { attrs }
@@ -9,7 +11,6 @@ export function createElementVueFactory(h) {
 }
 
 export function createElementReactFactory(h) {
-  const csstree = require('css-tree')
   return function createElementReact(tagName, attrs, innerHTML, children) {
     const arg2 = { ...attrs }
     if (innerHTML != null) {

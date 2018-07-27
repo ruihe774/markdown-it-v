@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-v",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-beta.1",
   "description": "A custom markdown-it renderer that outputs virtual DOM",
   "main": "dist/index.common.js",
   "repository": "https://github.com/TitanSnow/markdown-it-v",

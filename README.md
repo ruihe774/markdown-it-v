@@ -81,6 +81,12 @@ class Markdown extends React.Component {
 
 ## Changelog
 
+- 1.1.0
+  - Adds highlightNoWrappingEls (#1) by @laosb
+
+- 1.0.0-beta.1
+  - No change
+
 - 1.0.0-alpha.2
   - Use `_.fromPairs` in lodash
 

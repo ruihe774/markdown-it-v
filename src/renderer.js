@@ -40,20 +40,29 @@ const default_rules = {
     if (info) {
       attrs['class'] = addClass(attrs['class'], options.langPrefix + langName)
     }
-    slf.sDom.openTag('pre')
-    slf.sDom.openTag('code', attrs)
+    if (!options.highlightNoWrappingEls) {
+      slf.sDom.openTag('pre')
+      slf.sDom.openTag('code', attrs)
+    }
     const highlighted = options.highlight?.(token.content, langName, slf)
     if (highlighted === slf.sDom) {
       // Processed
-    } else if (typeof highlighted === 'string') {
+    } else if (
+      typeof highlighted === 'string' &&
+      !options.highlightNoWrappingEls
+    ) {
+      // When highlight function returns a string with highlightNoWrappingEls on,
+      // fence can be nothing more than just text.
       slf.sDom.closeTag()
       slf.sDom.currentNode.children.pop()
       slf.sDom.openTag('code', { ...attrs, __html: highlighted })
     } else {
       slf.sDom.appendText(token.content)
     }
-    slf.sDom.closeTag()
-    slf.sDom.closeTag()
+    if (!options.highlightNoWrappingEls) {
+      slf.sDom.closeTag()
+      slf.sDom.closeTag()
+    }
     slf.sDom.appendText('\n')
     return slf.sDom
   },

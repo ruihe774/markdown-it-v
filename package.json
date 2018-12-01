@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "A custom markdown-it renderer that outputs virtual DOM",
   "main": "dist/index.common.js",
+  "module": "dist/index.esm.js",
   "repository": "https://github.com/TitanSnow/markdown-it-v",
   "author": "TitanSnow",
   "license": "MIT",

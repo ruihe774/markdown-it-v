@@ -6,12 +6,18 @@ import json from 'rollup-plugin-json'
 export default [
     {
         input: 'src/index.js',
-        output: {
+        output: [{
             file: 'dist/index.common.js',
             format: 'cjs',
             exports: 'default',
             sourcemap: true
         },
+        {
+            file: 'dist/index.esm.js',
+            format: 'es',
+            exports: 'default',
+            sourcemap: true
+        }],
         plugins: [
             babel()
         ],

@@ -52,5 +52,8 @@
     "virtual dom",
     "vdom",
     "dom"
+  ],
+  "files": [
+    "dist"
   ]
 }

@@ -81,6 +81,9 @@ class Markdown extends React.Component {
 
 ## Changelog
 
+- 1.2.0
+  - Drop css-tree
+
 - 1.1.1
   - Add ES6 module output
 

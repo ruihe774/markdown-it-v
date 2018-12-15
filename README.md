@@ -81,6 +81,9 @@ class Markdown extends React.Component {
 
 ## Changelog
 
+- 1.1.1
+  - Add ES6 module output
+
 - 1.1.0
   - Adds highlightNoWrappingEls (#1) by @laosb
 

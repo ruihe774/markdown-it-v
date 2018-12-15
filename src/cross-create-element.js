@@ -1,5 +1,3 @@
-import csstree from 'css-tree'
-
 export function createElementVueFactory(h) {
   return function createElementVue(tagName, attrs, innerHTML, children) {
     const arg2 = { attrs }
@@ -18,18 +16,8 @@ export function createElementReactFactory(h) {
     }
     if (typeof arg2.style === 'string') {
       const styleString = arg2.style
-      arg2.style = {}
-      csstree.walk(
-        csstree.parse(styleString, {
-          context: 'declarationList',
-          parseValue: false,
-        }),
-        ({ type, property, value }) => {
-          if (type === 'Declaration') {
-            arg2.style[property] = value.value
-          }
-        },
-      )
+      delete arg2.style
+      arg2.ref = elem => elem.setAttribute('style', styleString)
     }
     return h(tagName, arg2, ...children)
   }

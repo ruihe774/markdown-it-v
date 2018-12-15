@@ -8,7 +8,6 @@
   "author": "TitanSnow",
   "license": "MIT",
   "dependencies": {
-    "css-tree": "^1.0.0-alpha.29",
     "lodash": "^4.17.10",
     "markdown-it": "^8.4.2"
   },

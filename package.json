@@ -40,7 +40,7 @@
   "scripts": {
     "build": "rollup -c",
     "test": "nyc mocha",
-    "lint": "eslint src/**/*.js"
+    "lint": "eslint ./**/*.js"
   },
   "keywords": [
     "markdown",

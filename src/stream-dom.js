@@ -40,11 +40,10 @@ export class Node {
       return ''
     } else if (this.innerHTML == null) {
       return this.children
-        .map(
-          child =>
-            typeof child === 'string'
-              ? escapeHtml(child)
-              : child.renderToHTML(xhtmlOut),
+        .map(child =>
+          typeof child === 'string'
+            ? escapeHtml(child)
+            : child.renderToHTML(xhtmlOut),
         )
         .join('')
     } else {
@@ -75,8 +74,8 @@ export class Node {
   }
   renderInnerVDOM(h) {
     return (
-      this.children.map(
-        child => (typeof child === 'string' ? child : child.renderToVDOM(h)),
+      this.children.map(child =>
+        typeof child === 'string' ? child : child.renderToVDOM(h),
       ) |> _.flatten
     )
   }

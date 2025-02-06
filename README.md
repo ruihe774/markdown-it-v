@@ -1,8 +1,6 @@
 # markdown⁠-⁠it⁠-⁠v
 A custom markdown⁠-⁠it renderer that outputs virtual DOM.
 
-![version](https://img.shields.io/npm/v/markdown-it-v.svg?style=for-the-badge)
-
 ## Motivation
 
 ### Why prefer virtual DOM to `innerHTML`?
@@ -21,7 +19,7 @@ A custom markdown⁠-⁠it renderer that outputs virtual DOM.
 
 ## Installation
 ```console
-$ npm install markdown-it markdown-it-v --save
+$ npm install markdown-it @ruihe774/markdown-it-v --save
 ```
 
 ## Usage

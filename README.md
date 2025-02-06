@@ -21,7 +21,7 @@ A custom markdown⁠-⁠it renderer that outputs virtual DOM.
 
 ## Installation
 ```console
-$ npm install markdown-it markdown-it-v@npm:@ruihe774/markdown-it-v@2 --save
+$ npm install markdown-it markdown-it-v@npm:@ruihe774/markdown-it-v@3 --save
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ Unfortunately you cannot use `StreamDom` in other places and it doesn’t implem
 ```javascript
 let vueVDom   = sdom.toVue(Vue.h)
 let reactVDom = sdom.toReact(React.createElement)
-let realDom   = sdom.toNative(document)    // not `document.createElement`!
+let realDom   = sdom.toNative(document.createElement.bind(document))    // `.bind()` is necessary
 let htmlStr   = sdom.toHTML()
 ```
 
@@ -64,31 +64,39 @@ Vue component (e.g. without JSX):
 ```javascript
 Vue.defineComponent({
     // in a Vue component
+    props: ['source'],
+    computed: {
+        sDom() {
+            return md.render(this.source)
+        }
+    },
     render() {
         const { h } = Vue
-        return h('div', null, sdom.toVue(h))
+        return h('div', null, this.sDom.toVue(h))
     }
 })
 ```
 
 React component (e.g. with JSX):
 ```jsx
-class Markdown extends React.Component {
+function Markdown({ source }) {
     // in a React component
-    render() {
-        const h = React.createElement
-        return <div>{sdom.toReact(h)}</div>
-    }
-}
-
-function Markdown(props) {
-    // or in a React functional compoment
     const h = React.createElement
+    const sdom = useMemo(() => md.render(source), [source])
     return <div>{sdom.toReact(h)}</div>
 }
 ```
 
+Vanilla:
+```javascript
+const container = document.createElement('div')
+container.append(...sdom.toNative(document.createElement.bind(document)))
+```
+
 ## Changelog
+
+- 3.0.0
+  - Return `(string | HTMLElement)[]` in `sdom.toNative`; do not require whole `document` object
 
 - 2.0.0
   - Major refactor

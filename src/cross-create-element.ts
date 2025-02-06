@@ -42,21 +42,19 @@ export function createElementReactFactory(
   }
 }
 
-export function createElementNativeFactory(document: Document): CreateElement {
+export function createElementNativeFactory(
+  createElement: typeof document.createElement,
+): CreateElement {
   return function createElementNative(tagName, attrs, innerHTML, children) {
-    const el = document.createElement(tagName)
+    const el = createElement(tagName)
     for (const [key, value] of Object.entries(attrs)) {
       el.setAttribute(key, value)
     }
     if (innerHTML != null) {
       el.innerHTML = innerHTML
     }
-    for (const child of children) {
-      el.appendChild(
-        typeof child === 'string'
-          ? document.createTextNode(child)
-          : (child as HTMLElement),
-      )
+    if (children.length) {
+      el.append(...(children as (string | HTMLElement)[]))
     }
     return el
   }

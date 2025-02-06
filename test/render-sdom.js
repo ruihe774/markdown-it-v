@@ -34,7 +34,7 @@ class SDomRenderer {
         const sdom = md.render(text)
         function genNative() {
           const root = document.createElement('div')
-          sdom.toNative(document).forEach(el => root.appendChild(el))
+          root.append(...sdom.toNative(document.createElement.bind(document)))
           return root.innerHTML
         }
         function genVue() {

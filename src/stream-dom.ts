@@ -3,7 +3,7 @@ import type MarkdownIt from 'markdown-it'
 import type { Dictionary } from 'lodash'
 import type { CreateElement, VirtualElement } from './cross-create-element.ts'
 import type { h as vueCreateElement, VNode as VueElement } from 'vue'
-import type { createElement as reactCreateElement, ReactNode } from 'react'
+import type { createElement as reactCreateElement, ReactElement } from 'react'
 
 const voidElements = [
   'base',
@@ -150,21 +150,17 @@ export default class StreamDom {
     ) as (string | VueElement)[]
   }
 
-  toReact(createElement: typeof reactCreateElement): ReactNode[] {
+  toReact(createElement: typeof reactCreateElement): (string | ReactElement)[] {
     return this.currentNode.renderToVDOM(
       crossCreateElement.createElementReactFactory(createElement),
-    ) as ReactNode[]
+    ) as (string | ReactElement)[]
   }
 
-  toNative(document: Document): Node[] {
-    return (
-      this.currentNode.renderToVDOM(
-        crossCreateElement.createElementNativeFactory(document),
-      ) as (string | VirtualElement)[]
-    ).map((el) =>
-      typeof el === 'string'
-        ? document.createTextNode(el)
-        : (el as HTMLElement),
-    )
+  toNative(
+    createElement: typeof document.createElement,
+  ): (string | HTMLElement)[] {
+    return this.currentNode.renderToVDOM(
+      crossCreateElement.createElementNativeFactory(createElement),
+    ) as (string | HTMLElement)[]
   }
 }

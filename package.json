@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "repository": "https://github.com/ruihe774/markdown-it-v",
   "author": "Misaki Kasumi",
-  "license": "MIT",
+  "license": "BSL-1.0",
   "peerDependencies": {
     "markdown-it": ">=12 <15"
   },

@@ -8,6 +8,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Rename package
+        run: |
+          jq '.name="@${{ github.repository }}"' < package.json > package.json~
+          mv package.json~ package.json
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -25,6 +29,8 @@ jobs:
         run: npm run test
       - name: Publish
         run: |
-          npm set "//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN"
+          npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
+          npm set "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}"
           npm publish --registry=https://npm.pkg.github.com
+          npm publish --access=public
         if: startsWith(github.ref, 'refs/tags/')

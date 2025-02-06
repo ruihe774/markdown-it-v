@@ -84,6 +84,14 @@ foo ~~ bar ~~ baz
 .
 
 
+Should parse strikethrough within link tags:
+.
+[~~foo~~]()
+.
+<p><a href=""><s>foo</s></a></p>
+.
+
+
 Newline should be considered a whitespace:
 .
 ~~test
@@ -111,4 +119,18 @@ From CommonMark test suite, replacing `**` with our marker:
 a~~"foo"~~
 .
 <p>a~~“foo”~~</p>
+.
+
+Coverage: single tilde
+.
+~a~
+.
+<p>~a~</p>
+.
+
+Regression test for #742:
+.
+-~~~~;~~~~~~
+.
+<p>-<s><s>;</s></s>~~</p>
 .

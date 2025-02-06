@@ -38,10 +38,7 @@ describe('test rendering in browser', function() {
                   })
                 })
                 .catch(err => {
-                  if (
-                    err.message.split('\n')[0] !==
-                    'Evaluation failed: Error: `void` tag cannot contain innerHTML'
-                  ) {
+                  if (!/`void` tag cannot contain innerHTML/.test(err.message)) {
                     throw err
                   } else {
                     console.debug('`void` tag contains innerHTML. Skipped.')

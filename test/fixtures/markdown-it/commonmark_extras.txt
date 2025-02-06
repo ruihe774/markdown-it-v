@@ -1,3 +1,10 @@
+Issue commonmark/cmark#383:
+.
+*****Hello*world****
+.
+<p>**<em><strong>Hello<em>world</em></strong></em></p>
+.
+
 Issue #246.  Double escaping in ALT
 .
 ![&](#)
@@ -22,6 +29,60 @@ Issue #55:
 <p>![test](foo bar)</p>
 .
 
+
+Reference labels: 'i̇θωkå'.toUpperCase() is 'İΘΩKÅ', but these should still be equivalent
+.
+[İϴΩKÅ]
+
+[i̇θωkå]: /url
+.
+<p><a href="/url">İϴΩKÅ</a></p>
+.
+
+
+Reference labels: support ligatures (equivalent according to unicode case folding)
+.
+[ﬀﬁﬂ]
+
+[fffifl]: /url
+.
+<p><a href="/url">ﬀﬁﬂ</a></p>
+.
+
+Reference can be interrupted by other rules
+.
+[foo]: /url 'title
+ - - -
+'
+
+[foo]
+.
+<p>[foo]: /url 'title</p>
+<hr>
+<p>’</p>
+<p>[foo]</p>
+.
+
+Escape character in link reference title doesn't escape newlines
+.
+[foo]: /url "
+hello
+\
+\
+\
+world
+"
+
+[foo]
+.
+<p><a href="/url" title="
+hello
+\
+\
+\
+world
+">foo</a></p>
+.
 
 Issue #35. `<` should work as punctuation
 .
@@ -83,6 +144,13 @@ _(hai)_.
 <p><em>(hai)</em>.</p>
 .
 
+Regression test, should not match emphasis markers in different link tags:
+.
+[*b]() [c*]()
+.
+<p><a href="">*b</a> <a href="">c*</a></p>
+.
+
 Those are two separate blockquotes:
 .
  - > foo
@@ -130,6 +198,27 @@ Regression test (code block + regular paragraph)
 </code></pre>
 <p>bar</p>
 </blockquote>
+.
+
+Regression test (tabs in lists, #830)
+.
+1. asd
+    2. asd
+
+---
+
+1. asd
+	2. asd
+.
+<ol>
+<li>asd
+2. asd</li>
+</ol>
+<hr>
+<ol>
+<li>asd
+2. asd</li>
+</ol>
 .
 
 Blockquotes inside indented lists should terminate correctly
@@ -190,16 +279,6 @@ bar
 </ul>
 .
 
-Info string in fenced code block can't contain marker used for the fence
-.
-~~~test~
-
-~~~test`
-.
-<p>~~~test~</p>
-<pre><code class="test`"></code></pre>
-.
-
 Tabs should be stripped from the beginning of the line
 .
  foo
@@ -238,6 +317,61 @@ List item terminating quote should not be paragraph continuation
 </ol>
 .
 
+
+Link destination cannot contain '<'
+.
+[](<foo<bar>)
+
+[](<foo\<bar>)
+.
+<p>[](&lt;foo<bar>)</p>
+<p><a href="foo%3Cbar"></a></p>
+.
+
+
+Link title cannot contain '(' when opened with it
+.
+[](url (xxx())
+
+[](url (xxx\())
+.
+<p>[](url (xxx())</p>
+<p><a href="url" title="xxx("></a></p>
+.
+
+
+Escaped space is not allowed in link destination, commonmark/CommonMark#493.
+.
+[link](a\ b)
+.
+<p>[link](a\ b)</p>
+.
+
+
+Allow EOL in processing instructions, commonmark/commonmark.js#196.
+.
+a <?
+?>
+.
+<p>a <?
+?></p>
+.
+
+
+Allow meta tag in an inline context, commonmark/commonmark-spec#527.
+.
+City:
+<span itemprop="contentLocation" itemscope itemtype="https://schema.org/City">
+  <meta itemprop="name" content="Springfield">
+</span>
+.
+<p>City:
+<span itemprop="contentLocation" itemscope itemtype="https://schema.org/City">
+<meta itemprop="name" content="Springfield">
+</span></p>
+.
+
+
 Coverage. Directive can terminate paragraph.
 .
 a
@@ -261,6 +395,14 @@ Coverage. Unpaired nested backtick (silent mode)
 *`foo*
 .
 <p><em>`foo</em></p>
+.
+
+
+Coverage. Should continue scanning after closing "```" despite cache
+.
+```aaa``bbb``ccc```ddd``eee``
+.
+<p><code>aaa``bbb``ccc</code>ddd<code>eee</code></p>
 .
 
 
@@ -485,11 +627,6 @@ Coverage. Various tags not interrupting blockquotes because of indentation:
 
 > foo
     # not a heading
-
-> foo
-    ```
-    not a fence
-    ```
 .
 <blockquote>
 <p>foo
@@ -499,8 +636,107 @@ Coverage. Various tags not interrupting blockquotes because of indentation:
 <p>foo
 # not a heading</p>
 </blockquote>
+.
+
+Coverage, entities with code > 10FFFF. Made this way for compatibility with commonmark.js.
+.
+&#x110000;
+
+&#x1100000;
+.
+<p>�</p>
+<p>&amp;#x1100000;</p>
+.
+
+Issue #696. Blockquotes should remember their level.
+.
+>>> foo
+bar
+>>> baz
+.
+<blockquote>
+<blockquote>
 <blockquote>
 <p>foo
-<code>not a fence</code></p>
+bar
+baz</p>
 </blockquote>
+</blockquote>
+</blockquote>
+.
+
+Issue #696. Blockquotes should stop when outdented from a list.
+.
+1. >>> foo
+   bar
+baz
+   >>> foo
+  >>> bar
+   >>> baz
+.
+<ol>
+<li>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>foo
+bar
+baz
+foo</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>bar
+baz</p>
+</blockquote>
+</blockquote>
+</blockquote>
+.
+
+Issue #772. Header rule should not interfere with html tags.
+.
+<!--
+==
+-->
+
+<pre>
+==
+</pre>
+.
+<!--
+==
+-->
+<pre>
+==
+</pre>
+.
+
+Softbreak in image description
+.
+There is a newline in this image ![here
+it is](https://github.com/executablebooks/)
+.
+<p>There is a newline in this image <img src="https://github.com/executablebooks/" alt="here
+it is"></p>
+.
+
+Hardbreak in image description
+.
+There is a newline in this image ![here\
+it is](https://github.com/executablebooks/)
+.
+<p>There is a newline in this image <img src="https://github.com/executablebooks/" alt="here
+it is"></p>
+.
+
+Html in image description
+.
+![text <textarea> text](image.png)
+.
+<p><img src="image.png" alt="text &lt;textarea&gt; text"></p>
 .

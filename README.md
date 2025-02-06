@@ -1,10 +1,7 @@
 # markdown⁠-⁠it⁠-⁠v
 A custom markdown⁠-⁠it renderer that outputs virtual DOM.
 
-![build](https://img.shields.io/travis/TitanSnow/markdown-it-v.svg?style=for-the-badge)
-![coverage](https://img.shields.io/codecov/c/github/TitanSnow/markdown-it-v.svg?style=for-the-badge)
 ![version](https://img.shields.io/npm/v/markdown-it-v.svg?style=for-the-badge)
-![license](https://img.shields.io/npm/l/markdown-it-v.svg?style=for-the-badge)
 
 ## Motivation
 
@@ -26,21 +23,25 @@ A custom markdown⁠-⁠it renderer that outputs virtual DOM.
 ```console
 $ npm install markdown-it markdown-it-v --save
 ```
-Or yarn:
-```console
-$ yarn add markdown-it markdown-it-v
-```
 
 ## Usage
 
 ### Setup
 markdown⁠-⁠it⁠-⁠v is a plugin of markdown⁠-⁠it:
 ```javascript
-const MarkdownIt = require('markdown-it')
-const MarkdownItV = require('markdown-it-v')
+import MarkdownIt from 'markdown-it'
+import MarkdownItVPlugin from 'markdown-it-v'
 
-const md = MarkdownIt()
-md.use(MarkdownItV)
+const md = MarkdownIt().use(MarkdownItVPlugin)
+```
+
+If you're using TypeScript, you can convert the enhanced markdown⁠-⁠it instance to the modified interface:
+```typescript
+import MarkdownIt from 'markdown-it'
+import MarkdownItVPlugin from 'markdown-it-v'
+import type { MarkdownItV } from 'markdown-it-v'
+
+const md = MarkdownIt().use(MarkdownItVPlugin) as unknown as MarkdownItV
 ```
 
 ### Render
@@ -52,23 +53,25 @@ let sdom = md.render('The *quick* brown fox _jumps_ over the **lazy** dog.')
 ### Convert
 Unfortunately you cannot use `StreamDom` in other places and it doesn’t implement a diff algorithm. You must convert it to final output:
 ```javascript
-let vueVDom   = sdom.toVue(vueVm.$createElement)    // `vueVm` is a Vue instance
+let vueVDom   = sdom.toVue(Vue.h)
 let reactVDom = sdom.toReact(React.createElement)
-let realDom   = sdom.toNative(document)             // not `document.createElement`!
+let realDom   = sdom.toNative(document)    // not `document.createElement`!
 let htmlStr   = sdom.toHTML()
 ```
 
 ### Integrate with JS Frameworks
-Vue component (without JSX):
+Vue component (e.g. without JSX):
 ```javascript
-{   // in a Vue component
-    render(h) {
+Vue.defineComponent({
+    // in a Vue component
+    render() {
+        const { h } = Vue
         return h('div', null, sdom.toVue(h))
     }
-}
+})
 ```
 
-React component (with JSX):
+React component (e.g. with JSX):
 ```jsx
 class Markdown extends React.Component {
     // in a React component
@@ -77,9 +80,20 @@ class Markdown extends React.Component {
         return <div>{sdom.toReact(h)}</div>
     }
 }
+
+function Markdown(props) {
+    // or in a React functional compoment
+    const h = React.createElement
+    return <div>{sdom.toReact(h)}</div>
+}
 ```
 
 ## Changelog
+
+- 2.0.0
+  - Major refactor
+  - Migrate to TypeScript
+  - Upgrade all packages
 
 - 1.2.0
   - Drop css-tree

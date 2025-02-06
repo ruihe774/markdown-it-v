@@ -1,0 +1,27 @@
+{
+  "name": "demo",
+  "private": true,
+  "version": "3.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "check": "vue-tsc --noEmit",
+    "format": "prettier -w src"
+  },
+  "dependencies": {
+    "markdown-it": "14.*",
+    "markdown-it-v": "file:..",
+    "vue": "3.*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "5.*",
+    "@vitejs/plugin-vue-jsx": "4.*",
+    "@vue/tsconfig": "0.7.*",
+    "prettier": "3.*",
+    "typescript": "5.*",
+    "vite": "6.*",
+    "vue-tsc": "2.*"
+  }
+}

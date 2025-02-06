@@ -166,13 +166,7 @@ export default (md: MarkdownIt): Renderer => {
 
     // @ts-ignore
     renderAttrs({ attrs }: MarkdownIt.Token): Dictionary<string> {
-      const obj: { [type: string]: string } = {}
-      if (attrs) {
-        for (const [key, value] of attrs) {
-          obj[key] = value
-        }
-      }
-      return obj
+      return Object.fromEntries(attrs ?? [])
     }
 
     // @ts-ignore

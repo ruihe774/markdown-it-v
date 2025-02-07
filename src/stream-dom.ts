@@ -115,13 +115,10 @@ export class VirtualNode {
 }
 
 export default class StreamDom {
-  currentNode: VirtualNode
-  xhtmlOut: boolean
+  currentNode = new VirtualNode(voidTag)
+  xhtmlOut = false
 
-  constructor(private utils: MarkdownIt.Utils) {
-    this.currentNode = new VirtualNode(voidTag)
-    this.xhtmlOut = false
-  }
+  constructor(private utils: MarkdownIt.Utils) {}
 
   openTag(
     tagName: string | typeof voidTag,

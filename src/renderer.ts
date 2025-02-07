@@ -58,7 +58,7 @@ const default_rules: RenderRuleRecord = {
     }
     slf.sDom.openTag('pre')
     slf.sDom.openTag('code', attrs)
-    let needClose = true
+    let hasWrapper = true
     let highlighted = options.highlight?.(
       token.content,
       langName,
@@ -68,23 +68,21 @@ const default_rules: RenderRuleRecord = {
       // Processed
     } else if (typeof highlighted == 'string') {
       if (highlighted.startsWith('<pre>') && highlighted.endsWith('</pre>')) {
-        needClose = false
+        hasWrapper = false
         highlighted = highlighted.slice(5, -6)
       }
       slf.sDom.closeTag()
-      if (!needClose) slf.sDom.closeTag()
+      if (!hasWrapper) slf.sDom.closeTag()
       slf.sDom.currentNode.children.pop()
-      slf.sDom.openTag(needClose ? 'code' : 'pre', {
+      slf.sDom.openTag(hasWrapper ? 'code' : 'pre', {
         ...attrs,
         __html: highlighted,
       })
     } else {
       slf.sDom.appendText(token.content)
     }
-    if (needClose) {
-      slf.sDom.closeTag()
-      slf.sDom.closeTag()
-    }
+    slf.sDom.closeTag()
+    if (hasWrapper) slf.sDom.closeTag()
     slf.sDom.appendText('\n')
     return slf.sDom
   },

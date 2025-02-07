@@ -21,15 +21,13 @@ const voidElements = [
   'command',
 ]
 
-export const voidTag = Symbol('void')
-
 export class VirtualNode {
   attrs: Dictionary<string>
   innerHTML?: string
   children: (string | VirtualNode)[]
 
   constructor(
-    public tagName: string | typeof voidTag,
+    public tagName: string | null,
     attrs?: Dictionary<string>,
     public parent?: VirtualNode,
     ...children: (string | VirtualNode)[]
@@ -55,7 +53,7 @@ export class VirtualNode {
     } else if (this.innerHTML == null) {
       return this.children
         .map((child) =>
-          typeof child === 'string'
+          typeof child == 'string'
             ? escapeHtml(child)
             : child.renderToHTML(escapeHtml, xhtmlOut),
         )
@@ -69,7 +67,7 @@ export class VirtualNode {
     escapeHtml: (str: string) => string,
     xhtmlOut: boolean = false,
   ): string {
-    if (this.tagName === voidTag) {
+    if (this.tagName == null) {
       return this.renderInnerHTML(escapeHtml, xhtmlOut)
     }
     const attrsString = this.renderAttrsToHTML(escapeHtml)
@@ -93,12 +91,12 @@ export class VirtualNode {
 
   renderInnerVDOM(h: CreateElement): (string | VirtualElement)[] {
     return this.children.flatMap((child) =>
-      typeof child === 'string' ? child : child.renderToVDOM(h),
+      typeof child == 'string' ? child : child.renderToVDOM(h),
     )
   }
 
   renderToVDOM(h: CreateElement): VirtualElement | (string | VirtualElement)[] {
-    if (this.tagName === voidTag) {
+    if (this.tagName == null) {
       if (this.innerHTML != null) {
         throw new Error('`void` tag cannot contain innerHTML')
       }
@@ -115,15 +113,12 @@ export class VirtualNode {
 }
 
 export default class StreamDom {
-  currentNode = new VirtualNode(voidTag)
+  currentNode = new VirtualNode(null)
   xhtmlOut = false
 
   constructor(private utils: MarkdownIt.Utils) {}
 
-  openTag(
-    tagName: string | typeof voidTag,
-    attrs: Dictionary<string> = {},
-  ): void {
+  openTag(tagName: string | null, attrs: Dictionary<string> = {}): void {
     const newNode = new VirtualNode(tagName, attrs, this.currentNode)
     this.currentNode.children.push(newNode)
     this.currentNode = newNode

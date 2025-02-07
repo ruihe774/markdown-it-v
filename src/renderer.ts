@@ -1,4 +1,4 @@
-import { default as StreamDom, voidTag } from './stream-dom.ts'
+import StreamDom from './stream-dom.ts'
 import type MarkdownIt from 'markdown-it'
 import type { Dictionary } from 'lodash'
 
@@ -104,13 +104,13 @@ const default_rules: RenderRuleRecord = {
   },
 
   html_block(tokens, idx, options, env, slf) {
-    slf.sDom.openTag(voidTag, { __html: tokens[idx].content })
+    slf.sDom.openTag(null, { __html: tokens[idx].content })
     slf.sDom.closeTag()
     return slf.sDom
   },
 
   html_inline(tokens, idx, options, env, slf) {
-    slf.sDom.openTag(voidTag, { __html: tokens[idx].content })
+    slf.sDom.openTag(null, { __html: tokens[idx].content })
     slf.sDom.closeTag()
     return slf.sDom
   },

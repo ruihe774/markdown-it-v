@@ -33,7 +33,7 @@ export function createElementReactFactory(
     if (innerHTML != null) {
       arg2.dangerouslySetInnerHTML = { __html: innerHTML }
     }
-    if (typeof arg2.style === 'string') {
+    if (typeof arg2.style == 'string') {
       const styleString = arg2.style
       delete arg2.style
       arg2.ref = (elem: HTMLElement) => elem.setAttribute('style', styleString)

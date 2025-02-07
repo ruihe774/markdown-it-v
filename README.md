@@ -95,6 +95,10 @@ container.append(...sdom.toNative(document.createElement.bind(document)))
 
 ## Changelog
 
+- 3.0.1
+  - Fix highlight fence
+  - Fix React refs
+
 - 3.0.0
   - Return `(string | HTMLElement)[]` in `sdom.toNative`; do not require whole `document` object
 

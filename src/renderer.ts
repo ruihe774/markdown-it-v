@@ -51,15 +51,10 @@ const default_rules: RenderRuleRecord = {
       ? slf.utils.unescapeAll(token.info).trim().split(/\s+/g)
       : ['']
     const attrs = slf.renderAttrs(token)
-    function addClass(classString: string | undefined, className: string) {
-      if (classString == null || classString === '') {
-        return className
-      } else {
-        return `${classString} ${className}`
-      }
-    }
     if (langName) {
-      attrs['class'] = addClass(attrs['class'], options.langPrefix + langName)
+      const classString = attrs['class']
+      const className = options.langPrefix + langName
+      attrs['class'] = classString ? `${classString} ${className}` : className
     }
     slf.sDom.openTag('pre')
     slf.sDom.openTag('code', attrs)
@@ -71,7 +66,7 @@ const default_rules: RenderRuleRecord = {
     ) as string | undefined | StreamDom
     if (highlighted === slf.sDom) {
       // Processed
-    } else if (typeof highlighted === 'string') {
+    } else if (typeof highlighted == 'string') {
       if (highlighted.startsWith('<pre>') && highlighted.endsWith('</pre>')) {
         needClose = false
         highlighted = highlighted.slice(5, -6)
@@ -151,7 +146,7 @@ export default (md: MarkdownIt): Renderer => {
   const Base = Object.getPrototypeOf(md.renderer)
     .constructor as new () => BaseRenderer
 
-  class RendererImpl extends Base implements Renderer {
+  class Renderer extends Base {
     sDom: StreamDom
 
     constructor(public utils: MarkdownIt.Utils) {
@@ -176,9 +171,9 @@ export default (md: MarkdownIt): Renderer => {
       env: any,
     ): StreamDom {
       tokens.forEach(({ type, children }, i) => {
-        if (type === 'inline') {
+        if (type == 'inline') {
           this.renderInline(children!, options, env)
-        } else if (typeof this.rules[type] !== 'undefined') {
+        } else if (this.rules[type] != null) {
           this.rules[type](
             tokens,
             i,
@@ -200,7 +195,7 @@ export default (md: MarkdownIt): Renderer => {
       env: any,
     ): StreamDom {
       tokens.forEach(({ type }, i) => {
-        if (typeof this.rules[type] !== 'undefined') {
+        if (this.rules[type] != null) {
           this.rules[type](
             tokens,
             i,
@@ -232,21 +227,21 @@ export default (md: MarkdownIt): Renderer => {
         } else {
           const attrs = this.renderAttrs(token)
           this.sDom.openTag(tagName, attrs)
-          if (nesting === 0) {
+          if (nesting == 0) {
             this.sDom.closeTag()
           }
         }
         let needLf = false
         if (block) {
           needLf = true
-          if (nesting === 1) {
+          if (nesting == 1) {
             if (idx + 1 < tokens.length) {
               const nextToken = tokens[idx + 1]
-              if (nextToken.type === 'inline' || nextToken.hidden) {
+              if (nextToken.type == 'inline' || nextToken.hidden) {
                 needLf = false
               } else if (
-                nextToken.nesting === -1 &&
-                nextToken.tag === token.tag
+                nextToken.nesting == -1 &&
+                nextToken.tag == token.tag
               ) {
                 needLf = false
               }
@@ -261,5 +256,5 @@ export default (md: MarkdownIt): Renderer => {
     }
   }
 
-  return new RendererImpl(md.utils)
+  return new Renderer(md.utils)
 }

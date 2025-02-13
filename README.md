@@ -42,6 +42,8 @@ import MarkdownItVPlugin from 'markdown-it-v'
 import type { MarkdownItV } from 'markdown-it-v'
 
 const md = MarkdownIt().use(MarkdownItVPlugin) as unknown as MarkdownItV
+// or
+const md = MarkdownItVPlugin(MarkdownIt())    // no type conversion needed
 ```
 
 ### Render

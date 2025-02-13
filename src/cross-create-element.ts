@@ -1,4 +1,4 @@
-import type { Dictionary } from 'lodash'
+import type { Dictionary } from './utils'
 import type { h as vueCreateElement, VNode as VueElement } from 'vue'
 import type { createElement as reactCreateElement, ReactElement } from 'react'
 

@@ -1,6 +1,6 @@
 import * as crossCreateElement from './cross-create-element.ts'
 import type MarkdownIt from 'markdown-it'
-import type { Dictionary } from 'lodash'
+import type { Dictionary } from './utils.ts'
 import type { CreateElement, VirtualElement } from './cross-create-element.ts'
 import type { h as vueCreateElement, VNode as VueElement } from 'vue'
 import type { createElement as reactCreateElement, ReactElement } from 'react'

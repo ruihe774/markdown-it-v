@@ -1,6 +1,6 @@
 import StreamDom from './stream-dom.ts'
 import type MarkdownIt from 'markdown-it'
-import type { Dictionary } from 'lodash'
+import type { Dictionary } from './utils.ts'
 
 type RenderRule = (
   tokens: MarkdownIt.Token[],

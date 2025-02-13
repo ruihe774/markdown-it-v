@@ -36,7 +36,8 @@ export function createElementReactFactory(
     if (typeof arg2.style == 'string') {
       const styleString = arg2.style
       delete arg2.style
-      arg2.ref = (elem: HTMLElement | null) => elem?.setAttribute('style', styleString)
+      arg2.ref = (elem: HTMLElement | null) =>
+        elem?.setAttribute('style', styleString)
     }
     return h(tagName, arg2, ...(children as (string | ReactElement)[]))
   }

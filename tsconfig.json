@@ -5,7 +5,7 @@
     "strict": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "dist",
+    "declarationDir": "typings",
     "isolatedModules": true,
     "allowImportingTsExtensions": true,
     "esModuleInterop": true,

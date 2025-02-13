@@ -30,14 +30,15 @@
     "react": "18.*",
     "react-dom": "18.*",
     "rollup": "4.*",
+    "rollup-plugin-dts": "6.*",
     "typescript": "5.*",
     "typescript-eslint": "8.*",
     "vue": "3.*"
   },
   "scripts": {
-    "build": "rollup -c",
-    "check": "tsc",
-    "format": "prettier -w src",
+    "build": "tsc && rollup -c",
+    "check": "tsc --noEmit",
+    "format": "prettier -w src *.mjs",
     "lint": "eslint src",
     "test": "node node_modules/.bin/mocha"
   },

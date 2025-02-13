@@ -97,6 +97,9 @@ container.append(...sdom.toNative(document.createElement.bind(document)))
 
 ## Changelog
 
+- 3.1.0
+  - The entry function now returns md directly
+
 - 3.0.1
   - Fix highlight fence
   - Fix React refs

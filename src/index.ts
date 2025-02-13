@@ -55,4 +55,6 @@ export default (md: MarkdownIt) => {
     }
     return result
   }
+
+  return mdv
 }

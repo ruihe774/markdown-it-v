@@ -1,4 +1,5 @@
-import { default as createRenderer, Renderer } from './renderer'
+import createRenderer from './renderer'
+import { createClass } from './utils'
 import type MarkdownIt from 'markdown-it'
 import type StreamDom from './stream-dom'
 
@@ -28,33 +29,52 @@ export interface MarkdownItV extends MarkdownIt {
   renderInline(src: string, env?: any): StreamDom
 }
 
-type BaseRenderer = MarkdownIt.Renderer
+export default (md: MarkdownIt): MarkdownItV => {
+  const Base = Object.getPrototypeOf(md).constructor as new () => MarkdownIt
 
-export default (md: MarkdownIt) => {
-  // workaround readonly
-  const renderer = createRenderer(md)
-  ;(md as unknown as { renderer: Renderer }).renderer = renderer
+  function MarkdownItV() {
+    // @ts-ignore
+    let _this = this
+    const constructing = _this instanceof MarkdownItV
+    if (constructing) {
+      _this = Reflect.construct(
+        Base,
+        [],
+        Object.getPrototypeOf(_this).constructor,
+      )
+    }
 
-  // auto clear renderer
-  const mdv = md as unknown as MarkdownItV
-  const render = md.render
-  const renderInline = md.renderInline
-  mdv.render = function (...args) {
-    const result = render.apply(this, args) as unknown as StreamDom
-    if ((this.renderer as unknown as Renderer) === renderer) {
-      renderer.clear()
-      result.xhtmlOut = !!md.options.xhtmlOut
+    _this.renderer = createRenderer(md)
+
+    if (!constructing) {
+      Object.setPrototypeOf(_this, MarkdownItV.prototype)
     }
-    return result
-  }
-  mdv.renderInline = function (...args) {
-    const result = renderInline.apply(this, args) as unknown as StreamDom
-    if ((this.renderer as unknown as Renderer) === renderer) {
-      renderer.clear()
-      result.xhtmlOut = !!md.options.xhtmlOut
-    }
-    return result
+    return _this
   }
 
-  return mdv
+  const methods = {
+    constructor: MarkdownItV,
+    render(...args) {
+      const result = Base.prototype.render.apply(this, args) as StreamDom
+      if ('clear' in this.renderer) {
+        // @ts-ignore
+        this.renderer.clear()
+        result.xhtmlOut = !!md.options.xhtmlOut
+      }
+      return result
+    },
+    renderInline(...args) {
+      const result = Base.prototype.renderInline.apply(this, args) as StreamDom
+      if ('clear' in this.renderer) {
+        // @ts-ignore
+        this.renderer.clear()
+        result.xhtmlOut = !!md.options.xhtmlOut
+      }
+      return result
+    },
+  } as MarkdownItV & { constructor: any }
+
+  createClass(MarkdownItV, Base, methods)
+
+  return MarkdownItV.call(md)
 }

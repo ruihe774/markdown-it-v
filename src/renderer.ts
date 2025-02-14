@@ -1,4 +1,5 @@
 import StreamDom from './stream-dom'
+import { createClass } from './utils'
 import type MarkdownIt from 'markdown-it'
 import type { Dictionary } from './utils'
 
@@ -140,29 +141,43 @@ export declare interface Renderer extends BaseRenderer {
   ): StreamDom
 }
 
-export default (md: MarkdownIt): Renderer => {
-  const Base = Object.getPrototypeOf(md.renderer)
+export default ({ renderer, utils }: MarkdownIt): Renderer => {
+  const Base = Object.getPrototypeOf(renderer)
     .constructor as new () => BaseRenderer
 
-  class Renderer extends Base {
-    sDom: StreamDom
-
-    constructor(public utils: MarkdownIt.Utils) {
-      super()
-      Object.assign(this.rules, default_rules)
-      this.sDom = new StreamDom(this.utils)
+  function Renderer() {
+    // @ts-ignore
+    let _this = this
+    const constructing = _this instanceof Renderer
+    if (constructing) {
+      _this = Reflect.construct(
+        Base,
+        [],
+        Object.getPrototypeOf(_this).constructor,
+      )
     }
+
+    Object.assign(_this.rules, default_rules)
+    _this.sDom = new StreamDom(utils)
+    _this.utils = utils
+
+    if (!constructing) {
+      Object.setPrototypeOf(_this, Renderer.prototype)
+    }
+    return _this
+  }
+
+  const methods = {
+    constructor: Renderer,
 
     clear(): void {
       this.sDom = new StreamDom(this.utils)
-    }
+    },
 
-    // @ts-ignore
     renderAttrs({ attrs }: MarkdownIt.Token): Dictionary<string> {
       return Object.fromEntries(attrs ?? [])
-    }
+    },
 
-    // @ts-ignore
     render(
       tokens: MarkdownIt.Token[],
       options: MarkdownIt.Options,
@@ -184,9 +199,8 @@ export default (md: MarkdownIt): Renderer => {
         }
       })
       return this.sDom
-    }
+    },
 
-    // @ts-ignore
     renderInline(
       tokens: MarkdownIt.Token[],
       options: MarkdownIt.Options,
@@ -206,9 +220,8 @@ export default (md: MarkdownIt): Renderer => {
         }
       })
       return this.sDom
-    }
+    },
 
-    // @ts-ignore
     renderToken(
       tokens: MarkdownIt.Token[],
       idx: number,
@@ -251,8 +264,10 @@ export default (md: MarkdownIt): Renderer => {
         }
       }
       return this.sDom
-    }
-  }
+    },
+  } as Renderer & { constructor: any }
 
-  return new Renderer(md.utils)
+  createClass(Renderer, Base, methods)
+
+  return Renderer.call(renderer)
 }

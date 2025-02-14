@@ -1,8 +1,8 @@
-import { default as createRenderer, Renderer } from './renderer.ts'
+import { default as createRenderer, Renderer } from './renderer'
 import type MarkdownIt from 'markdown-it'
-import type StreamDom from './stream-dom.ts'
+import type StreamDom from './stream-dom'
 
-export type { default as StreamDom } from './stream-dom.ts'
+export type { default as StreamDom } from './stream-dom'
 
 // @ts-ignore
 export interface MarkdownItV extends MarkdownIt {

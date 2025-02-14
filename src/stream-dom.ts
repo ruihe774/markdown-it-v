@@ -1,7 +1,7 @@
-import * as crossCreateElement from './cross-create-element.ts'
+import * as crossCreateElement from './cross-create-element'
 import type MarkdownIt from 'markdown-it'
-import type { Dictionary } from './utils.ts'
-import type { CreateElement, VirtualElement } from './cross-create-element.ts'
+import type { Dictionary } from './utils'
+import type { CreateElement, VirtualElement } from './cross-create-element'
 import type { h as vueCreateElement, VNode as VueElement } from 'vue'
 import type { createElement as reactCreateElement, ReactElement } from 'react'
 
